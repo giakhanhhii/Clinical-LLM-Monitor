@@ -1,202 +1,75 @@
----
-base_model: C:\codes\llama31\Meta-Llama-3.1-8B-Instruct
+base_model: C:\Project\Clinical-LLM-Monitor
 library_name: peft
 ---
 
-# Model Card for Model ID
+# Model Card for med-retriever-llama-v1
 
-<!-- Provide a quick summary of what the model is/does. -->
-
-
+Mô hình này là một phiên bản tinh chỉnh (fine-tuned) của **Llama 3.1 8B Instruct** dành riêng cho lĩnh vực y tế, tối ưu hóa khả năng truy xuất và phản hồi hội thoại lâm sàng.
 
 ## Model Details
 
 ### Model Description
 
-<!-- Provide a longer summary of what this model is. -->
+- **Developed by:** Nguyễn Triệu Gia Khánh
+- **Model type:** Causal Language Model (Fine-tuned with QLoRA)
+- **Language(s) (NLP):** Tiếng Anh (Y khoa)
+- **License:** MIT
+- **Finetuned from model:** Meta-Llama-3.1-8B-Instruct
 
+### Model Sources
 
-
-- **Developed by:** [More Information Needed]
-- **Funded by [optional]:** [More Information Needed]
-- **Shared by [optional]:** [More Information Needed]
-- **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
-- **License:** [More Information Needed]
-- **Finetuned from model [optional]:** [More Information Needed]
-
-### Model Sources [optional]
-
-<!-- Provide the basic links for the model. -->
-
-- **Repository:** [More Information Needed]
-- **Paper [optional]:** [More Information Needed]
-- **Demo [optional]:** [More Information Needed]
+- **Repository:** [https://github.com/giakhanhhii/Clinical-LLM-Monitor](https://github.com/giakhanhhii/Clinical-LLM-Monitor)
+- **Project Path:** `C:\Project\Clinical-LLM-Monitor`
 
 ## Uses
 
-<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
-
 ### Direct Use
 
-<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
-
-[More Information Needed]
-
-### Downstream Use [optional]
-
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
-
-[More Information Needed]
+Hỗ trợ giải đáp các thắc mắc về triệu chứng bệnh và cung cấp thông tin dựa trên dữ liệu hội thoại giữa bác sĩ và bệnh nhân.
 
 ### Out-of-Scope Use
 
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
-
-[More Information Needed]
-
-## Bias, Risks, and Limitations
-
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
-
-[More Information Needed]
-
-### Recommendations
-
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
-
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
-
-## How to Get Started with the Model
-
-Use the code below to get started with the model.
-
-[More Information Needed]
+Không sử dụng mô hình này để thay thế hoàn toàn chẩn đoán chuyên môn từ bác sĩ thực tế trong các tình huống cấp cứu.
 
 ## Training Details
 
 ### Training Data
 
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
-
-[More Information Needed]
+Mô hình được huấn luyện trên tập dữ liệu **knowrohit07/know_medical_dialogues** từ Hugging Face, bao gồm các hội thoại lâm sàng thực tế.
 
 ### Training Procedure
 
-<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
-
-#### Preprocessing [optional]
-
-[More Information Needed]
-
-
 #### Training Hyperparameters
 
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+- **Quantization:** 4-bit NormalFloat (NF4) với Double Quantization.
+- **PEFT (LoRA) Config:** `r=64`, `lora_alpha=16`, `target_modules=["q_proj", "v_proj"]`.
+- **Optimizer:** Paged AdamW 32-bit.
+- **Training regime:** fp16 mixed precision.
 
-#### Speeds, Sizes, Times [optional]
+#### Speeds, Sizes, Times
 
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
-
-[More Information Needed]
+- **Epochs:** 5.
+- **Training Loss:** 2.1.
+- **Training Time:** Khoảng 10 giờ trên phần cứng cá nhân.
 
 ## Evaluation
 
-<!-- This section describes the evaluation protocols and provides the results. -->
-
-### Testing Data, Factors & Metrics
-
-#### Testing Data
-
-<!-- This should link to a Dataset Card if possible. -->
-
-[More Information Needed]
-
-#### Factors
-
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
-
-[More Information Needed]
-
-#### Metrics
-
-<!-- These are the evaluation metrics being used, ideally with a description of why. -->
-
-[More Information Needed]
-
 ### Results
 
-[More Information Needed]
+- **Avg. Cosine Similarity (Test Set):** 0.5294 (Sử dụng `all-MiniLM-L6-v2` để đánh giá độ tương đồng ngữ nghĩa).
 
-#### Summary
-
-
-
-## Model Examination [optional]
-
-<!-- Relevant interpretability work for the model goes here -->
-
-[More Information Needed]
-
-## Environmental Impact
-
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
-
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
-
-- **Hardware Type:** [More Information Needed]
-- **Hours used:** [More Information Needed]
-- **Cloud Provider:** [More Information Needed]
-- **Compute Region:** [More Information Needed]
-- **Carbon Emitted:** [More Information Needed]
-
-## Technical Specifications [optional]
-
-### Model Architecture and Objective
-
-[More Information Needed]
+## Technical Specifications
 
 ### Compute Infrastructure
 
-[More Information Needed]
-
 #### Hardware
-
-[More Information Needed]
+- **GPU:** Nvidia GeForce GTX (3 GiB VRAM trở lên để inference).
 
 #### Software
+- **Frameworks:** FastAPI, PyTorch, Transformers, PEFT, BitsAndBytes.
 
-[More Information Needed]
-
-## Citation [optional]
-
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
-
-**BibTeX:**
-
-[More Information Needed]
-
-**APA:**
-
-[More Information Needed]
-
-## Glossary [optional]
-
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
-
-[More Information Needed]
-
-## More Information [optional]
-
-[More Information Needed]
-
-## Model Card Authors [optional]
-
-[More Information Needed]
-
-## Model Card Contact
-
-[More Information Needed]
 ### Framework versions
 
 - PEFT 0.12.0
+- Transformers 4.43.3
+- PyTorch 2.4.0
